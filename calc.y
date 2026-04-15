@@ -40,7 +40,7 @@ input:
 
 line:
       '\n'
-    | E '\n'
+    | E '\n' {printf("%d\n",$1);}
     ;
 
 E:
@@ -129,14 +129,12 @@ T:
     ;
 
 F:
-      INC ID
-    | DEC ID
-    | ID INC
-    | ID DEC
-    | '-' F
-    | P          {
-                    $$ = $1;
-                 }
+      INC ID {vars[getIndex($2)]++; $$=vars[getIndex($2)];}
+    | DEC ID {vars[getIndex($2)]--; $$=vars[getIndex($2)];}
+    | ID INC { $$ = vars[getIndex($1)]; vars[getIndex($1)]++; }
+    | ID DEC { $$ = vars[getIndex($1)]; vars[getIndex($1)]--; }
+    | '-' F    { $$ = -$2; } 
+    | P          { $$ = $1; }
     ;
 
 P:
